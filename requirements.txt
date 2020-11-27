@@ -16,9 +16,13 @@ lxml==4.5.0
 MarkupSafe==1.1.1
 mccabe==0.6.1
 mysqlclient==2.0.1
+numpy==1.19.4
+pandas==1.1.4
 py4j==0.10.9
 pylint==2.6.0
 pyspark==3.0.1
+python-dateutil==2.8.1
+pytz==2020.4
 requests==2.22.0
 six==1.15.0
 soupsieve==1.9.5

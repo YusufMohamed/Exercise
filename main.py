@@ -1,29 +1,26 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from sqlalchemy import create_engine
-from Services import get_data_from_api, save_to_database
-
+from Services import get_data_from_api, top_five_genres
+from secrets import *
 
 app = Flask(__name__)
-PWD = 'joest3r.95'
-USR = 'ymkhalifa'
-SQLALCHEMY_DATABASE_URI = 'mysql://{}:{}@localhost:3306/andela'.format(USR, PWD)
-SQLALCHEMY_DATABASE_URI_2 = 'sqlite:///andela.db'
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
-engine = create_engine(SQLALCHEMY_DATABASE_URI_2, echo=True)
+SQLALCHEMY_DATABASE_URI = 'mysql://{}:{}@{}:{}/{}'.format(USR, PWD, DATABASE_HOST_IP, DATABASE_HOST_PORT, DATABASE_NAME)
+engine = create_engine(SQLALCHEMY_DATABASE_URI)
 
-@app.route('/')
-def hello_world():
-   return 'Hello World'
 
-@app.route('/movies', methods = ['GET'])
+@app.route('/movies', methods=['GET'])
 def process_movie():
-    get_data_from_api(request.args.to_dict(), engine)
+    response = get_data_from_api(request.args.to_dict(), engine)
+    return jsonify(response)
 
-@app.route('/compute', methods =  ['GET'])
+
+@app.route('/compute', methods=['GET'])
 def compute():
-
-    return 1
+    result = top_five_genres(engine)
+    return jsonify(result)
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host=WEBAPP_IP, port=WEPAPP_PORT)
